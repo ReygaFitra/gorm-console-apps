@@ -1,6 +1,6 @@
 package main
 
-import "gorm-basic/delivery"
+import "github.com/ReygaFitra/gorm-console-apps/delivery"
 
 func main() {
 	delivery.RunServer()

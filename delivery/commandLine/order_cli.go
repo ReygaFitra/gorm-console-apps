@@ -3,13 +3,14 @@ package commandline
 import (
 	"bufio"
 	"fmt"
-	"gorm-basic/config/entity"
-	"gorm-basic/usecase"
-	"gorm-basic/utils"
 	"log"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/ReygaFitra/gorm-console-apps/config/entity"
+	"github.com/ReygaFitra/gorm-console-apps/usecase"
+	"github.com/ReygaFitra/gorm-console-apps/utils"
 )
 
 type OrderDelivery interface {

@@ -1,4 +1,4 @@
-module gorm-basic
+module github.com/ReygaFitra/gorm-console-apps
 
 go 1.20
 

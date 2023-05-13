@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"gorm-basic/config/entity"
+	"github.com/ReygaFitra/gorm-console-apps/config/entity"
 
 	"gorm.io/gorm"
 )

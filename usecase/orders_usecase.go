@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"gorm-basic/config/entity"
-	"gorm-basic/repository"
+	"github.com/ReygaFitra/gorm-console-apps/config/entity"
+	"github.com/ReygaFitra/gorm-console-apps/repository"
 )
 
 type OrderUsecase interface {

@@ -3,10 +3,11 @@ package commandline
 import (
 	"bufio"
 	"fmt"
-	"gorm-basic/repository"
-	"gorm-basic/usecase"
-	"gorm-basic/utils"
 	"os"
+
+	"github.com/ReygaFitra/gorm-console-apps/repository"
+	"github.com/ReygaFitra/gorm-console-apps/usecase"
+	"github.com/ReygaFitra/gorm-console-apps/utils"
 
 	"gorm.io/gorm"
 )

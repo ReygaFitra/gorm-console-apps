@@ -1,10 +1,10 @@
 package delivery
 
 import (
-	"gorm-basic/config"
-	commandline "gorm-basic/delivery/commandLine"
-	"gorm-basic/repository"
-	"gorm-basic/usecase"
+	"github.com/ReygaFitra/gorm-console-apps/config"
+	commandline "github.com/ReygaFitra/gorm-console-apps/delivery/commandline"
+	"github.com/ReygaFitra/gorm-console-apps/repository"
+	"github.com/ReygaFitra/gorm-console-apps/usecase"
 )
 
 func RunServer() {

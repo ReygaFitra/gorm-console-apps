@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"gorm-basic/utils"
+	"github.com/ReygaFitra/gorm-console-apps/utils"
 
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"

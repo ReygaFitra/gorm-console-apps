@@ -15,6 +15,7 @@ import (
 type ProductDelivery interface {
 	ProductMenu()
 	AddProductCli()
+	ShowProductsCli()
 }
 
 type productDelivery struct {
@@ -28,7 +29,7 @@ func (d *productDelivery) ProductMenu() {
 Products Menu:
 
 1. Add Product
-2. View Product
+2. Show Product
 3. Edit Product
 4. Remove Product
 5. Back to Main Menu
@@ -45,7 +46,7 @@ Choose your menu: `
 		d.AddProductCli()
 	case "2":
 		utils.ClearBash()
-
+		d.ShowProductsCli()
 	case "3":
 		utils.ClearBash()
 
@@ -102,6 +103,55 @@ func (d *productDelivery) AddProductCli() {
 
 	fmt.Println("Product added successfully!")
 	d.ProductMenu()
+}
+
+func (d *productDelivery) ShowProductsCli() {
+	scanner := bufio.NewScanner(os.Stdin)
+	menu := `
+=====================
+Show Products Menu:
+
+1. Show All Products
+2. Show Product by Product Code
+3. Back to Product Menu
+4. Exit
+
+Choose your menu: `
+
+	fmt.Print(menu)
+	scanner.Scan()
+	userCommand := scanner.Text()
+	switch userCommand {
+	case "1":
+		utils.ClearBash()
+		products, err := d.productUsecase.ShowAllProducts()
+		if err != nil {
+			log.Fatal("Data is Empty!")
+		}
+		for _, product := range products {
+			fmt.Println(product.ProductCode, product.ProductName, product.Stock, product.Price)
+		}
+	case "2":
+		utils.ClearBash()
+		fmt.Printf("Input Product Code : ")
+		scanner.Scan()
+		productCode := scanner.Text()
+		product, err := d.productUsecase.ShowProductByPcode(productCode)
+		if err != nil {
+			log.Fatal("Data is Empty!")
+		}
+		fmt.Println(product)
+	case "3":
+		utils.ClearBash()
+		d.ProductMenu()
+	case "4":
+		utils.ClearBash()
+		fmt.Println("Thank You")
+		os.Exit(1)
+	default:
+		utils.ClearBash()
+		d.ProductMenu()
+	}
 }
 
 func NewProductDelivery(productUsecase usecase.ProductUsecase) ProductDelivery {

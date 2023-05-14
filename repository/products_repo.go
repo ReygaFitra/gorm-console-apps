@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/ReygaFitra/gorm-console-apps/config/entity"
 
 	"gorm.io/gorm"
@@ -8,6 +10,8 @@ import (
 
 type ProductRepository interface {
 	InsertProduct(product *entity.Products) error
+	GetAllProducts() ([]entity.Products, error)
+	GetProductByPcode(pCode string) (*entity.Products, error)
 }
 
 type productRepository struct {
@@ -20,6 +24,26 @@ func (r *productRepository) InsertProduct(product *entity.Products) error {
 		return res.Error
 	}
 	return nil
+}
+
+func (r *productRepository) GetAllProducts() ([]entity.Products, error) {
+	var products []entity.Products
+	res := r.db.Find(&products)
+	if res.Error != nil {
+		log.Println("Failed Show All Products")
+		return nil, res.Error
+	}
+	return products, nil
+}
+
+func (r *productRepository) GetProductByPcode(pCode string) (*entity.Products, error) {
+	var product *entity.Products
+	res := r.db.Where("product_code = ?", pCode).First(&product)
+	if res.Error != nil {
+		log.Println("Failed Show Product")
+		return nil, res.Error
+	}
+	return product, nil
 }
 
 func NewProductRepository(db *gorm.DB) ProductRepository {

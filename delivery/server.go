@@ -27,8 +27,4 @@ func RunServer() {
 		OrderDelivery:   orderCli,
 	}
 	mainMenu.DisplayMainMenu()
-	// var mainMenu commandline.MainMenu
-	// mainMenu.InitService()
-	// mainMenu.DisplayMainMenu()
-	
 }

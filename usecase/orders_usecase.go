@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"log"
+
 	"github.com/ReygaFitra/gorm-console-apps/config/entity"
 	"github.com/ReygaFitra/gorm-console-apps/repository"
 )
@@ -8,6 +10,7 @@ import (
 type OrderUsecase interface {
 	AddOrder(order *entity.Orders) (*entity.Orders, error)
 	AddOrderDetails(orderDetail *[]entity.OrderDetails) error
+	ShowAllOrders() ([]entity.OrderDetails, error)
 }
 
 type orderUsecase struct {
@@ -23,7 +26,21 @@ func (u *orderUsecase) AddOrder(order *entity.Orders) (*entity.Orders, error) {
 }
 
 func (u *orderUsecase) AddOrderDetails(orderDetails *[]entity.OrderDetails) error {
-	return u.orderRepo.InsertOrderDetails(orderDetails)
+	 err := u.orderRepo.InsertOrderDetails(orderDetails)
+	 if err != nil {
+		log.Fatal("Something when wrong")
+		return err
+	 }
+	 return nil
+}
+
+func (u *orderUsecase) ShowAllOrders() ([]entity.OrderDetails, error) {
+	res, err := u.orderRepo.GetAllOrders()
+	if err != nil {
+		log.Fatal("Something when wrong")
+		return nil, err
+	}
+	return res, nil
 }
 
 func NewOrderUsecase(orderRepo repository.OrderRepository) OrderUsecase {

@@ -29,8 +29,8 @@ Orders Menu:
 
 1. Add Order
 2. Add Order Detail
-3. Edit Order
-4. Remove Order
+3. Show All Order
+4. Edit Order
 5. Back to Main Menu
 6. Exit
 
@@ -48,7 +48,13 @@ Choose your menu: `
 		d.AddOrderDetailCli()
 	case "3":
 		utils.ClearBash()
-		
+		orders, err := d.orderUsecase.ShowAllOrders()
+		if err != nil {
+			log.Fatal("Data is Empty")
+		}
+		for _, order := range orders {
+			fmt.Println(order.IdOrderDetail, order.OrdersIdOrder, order.ProductsProductCode, order.Qty)
+		}
 	case "4":
 		utils.ClearBash()
 		

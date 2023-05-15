@@ -16,6 +16,7 @@ type ProductDelivery interface {
 	ProductMenu()
 	AddProductCli()
 	ShowProductsCli()
+	EditProductCli()
 }
 
 type productDelivery struct {
@@ -49,7 +50,7 @@ Choose your menu: `
 		d.ShowProductsCli()
 	case "3":
 		utils.ClearBash()
-
+		d.EditProductCli()
 	case "4":
 		utils.ClearBash()
 
@@ -100,7 +101,6 @@ func (d *productDelivery) AddProductCli() {
 	if err != nil {
 		log.Fatal("Failed Insert Product")
 	}
-
 	fmt.Println("Product added successfully!")
 	d.ProductMenu()
 }
@@ -131,6 +131,7 @@ Choose your menu: `
 		for _, product := range products {
 			fmt.Println(product.ProductCode, product.ProductName, product.Stock, product.Price)
 		}
+		d.ProductMenu()
 	case "2":
 		utils.ClearBash()
 		fmt.Printf("Input Product Code : ")
@@ -141,6 +142,7 @@ Choose your menu: `
 			log.Fatal("Data is Empty!")
 		}
 		fmt.Println(product)
+		d.ProductMenu()
 	case "3":
 		utils.ClearBash()
 		d.ProductMenu()
@@ -152,6 +154,53 @@ Choose your menu: `
 		utils.ClearBash()
 		d.ProductMenu()
 	}
+}
+
+func (d *productDelivery) EditProductCli() {
+	fmt.Println("Product yang tersedia: ")
+	products, err := d.productUsecase.ShowAllProducts()
+	if err != nil {
+			log.Fatal("Data is Empty!")
+		}
+	for _, product := range products {
+			fmt.Println(product.ProductCode, product.ProductName, product.Stock, product.Price)
+		}
+
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Input Product Code : ")
+	scanner.Scan()
+	productCode := scanner.Text()
+
+	fmt.Printf("Input Product Name : ")
+	scanner.Scan()
+	productName := scanner.Text()
+
+	fmt.Printf("Input Stock : ")
+	scanner.Scan()
+	productStock, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		log.Fatal("Invalid Format Input!")
+	}
+
+	fmt.Printf("Input Price : ")
+	scanner.Scan()
+	productPrice, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		log.Fatal("Invalid Format Input!")
+	}
+
+	oldProduct := entity.Products{
+		ProductCode: productCode,
+		ProductName: productName,
+		Stock: productStock,
+		Price: productPrice,
+	}
+	err = d.productUsecase.EditProduct(productCode, &oldProduct)
+	if err != nil {
+		log.Fatal("Failed Update Product!")
+	}
+	fmt.Println("Product Update Successfully")
+	d.ProductMenu()
 }
 
 func NewProductDelivery(productUsecase usecase.ProductUsecase) ProductDelivery {

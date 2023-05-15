@@ -15,6 +15,7 @@ import (
 
 type OrderDelivery interface {
 	OrderMenu()
+	EditOrderCli()
 }
 
 type ordeDelivery struct {
@@ -31,8 +32,9 @@ Orders Menu:
 2. Add Order Detail
 3. Show All Order
 4. Edit Order
-5. Back to Main Menu
-6. Exit
+5. Remove Order
+6. Back to Main Menu
+7. Exit
 
 Choose your menu: `
 
@@ -57,10 +59,11 @@ Choose your menu: `
 		}
 	case "4":
 		utils.ClearBash()
-		
-	case "5":
-		utils.ClearBash()
+		d.EditOrderCli()
 	case "6":
+		utils.ClearBash()
+		
+	case "7":
 		utils.ClearBash()
 		fmt.Println("Thank You")
 		os.Exit(1)
@@ -140,6 +143,54 @@ func (d *ordeDelivery) AddOrderDetailCli() {
 	}
 
 	fmt.Println("Product added successfully!")
+	d.OrderMenu()
+}
+
+func (d *ordeDelivery) EditOrderCli() {
+	fmt.Println("Data order yang tersedia: ")
+	orders, err := d.orderUsecase.ShowAllOrders()
+	if err != nil {
+			log.Fatal("Data is Empty")
+		}
+	for _, order := range orders {
+			fmt.Println(order.IdOrderDetail, order.OrdersIdOrder, order.ProductsProductCode, order.Qty)
+		}
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Input ID Order : ")
+	scanner.Scan()
+	ID, _ := strconv.Atoi(scanner.Text())
+
+	fmt.Printf("Input Order Year : ")
+	scanner.Scan()
+	yearCli, _ := strconv.Atoi(scanner.Text())
+
+	fmt.Printf("Input Order Month : ")
+	scanner.Scan()
+	monthCli, _ := strconv.Atoi(scanner.Text())
+
+	fmt.Printf("Input Order Date : ")
+	scanner.Scan()
+	dateCli, _ := strconv.Atoi(scanner.Text())
+
+	fmt.Printf("Input Payment Methode : ")
+	scanner.Scan()
+	paymentMethod := scanner.Text()
+
+	fmt.Printf("Input Order Total : ")
+	scanner.Scan()
+	total, _ := strconv.Atoi(scanner.Text())
+
+	oldOrder := entity.Orders{
+		IdOrders: ID,
+		OrderDate:     time.Date(int(yearCli), time.Month(monthCli), int(dateCli), 0, 0, 0, 0, time.Local),
+		PaymentMethod: paymentMethod,
+		OrderTotal:    total,
+	}
+	err = d.orderUsecase.EditOrder(ID, &oldOrder)
+	if err != nil {
+		log.Fatal("Failed Update Order")
+	}
+	fmt.Println("Update Order Successfully")
 	d.OrderMenu()
 }
 

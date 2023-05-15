@@ -12,6 +12,7 @@ type ProductRepository interface {
 	InsertProduct(product *entity.Products) error
 	GetAllProducts() ([]entity.Products, error)
 	GetProductByPcode(pCode string) (*entity.Products, error)
+	UpdateProduct(pCode string, dataProduct *entity.Products) error
 }
 
 type productRepository struct {
@@ -44,6 +45,15 @@ func (r *productRepository) GetProductByPcode(pCode string) (*entity.Products, e
 		return nil, res.Error
 	}
 	return product, nil
+}
+
+func (r *productRepository) UpdateProduct(pCode string, dataProduct *entity.Products) error {
+	res := r.db.Where("product_code = ?", pCode).Updates(&dataProduct)
+	if res.Error != nil {
+		log.Println("Failed Updating Product!")
+		return res.Error
+	}
+	return nil
 }
 
 func NewProductRepository(db *gorm.DB) ProductRepository {

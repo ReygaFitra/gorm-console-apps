@@ -13,6 +13,7 @@ type ProductRepository interface {
 	GetAllProducts() ([]entity.Products, error)
 	GetProductByPcode(pCode string) (*entity.Products, error)
 	UpdateProduct(pCode string, dataProduct *entity.Products) error
+	DeleteProduct(pCode string) error
 }
 
 type productRepository struct {
@@ -51,6 +52,17 @@ func (r *productRepository) UpdateProduct(pCode string, dataProduct *entity.Prod
 	res := r.db.Where("product_code = ?", pCode).Updates(&dataProduct)
 	if res.Error != nil {
 		log.Println("Failed Updating Product!")
+		return res.Error
+	}
+	return nil
+}
+
+func(r *productRepository) DeleteProduct(pCode string) error {
+	res := r.db.Delete(&entity.Products{
+		ProductCode: pCode,
+	})
+	if res.Error != nil {
+		log.Println("Failed Deleting Product!")
 		return res.Error
 	}
 	return nil

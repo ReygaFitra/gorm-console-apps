@@ -16,6 +16,7 @@ import (
 type OrderDelivery interface {
 	OrderMenu()
 	EditOrderCli()
+	RemoveOrderDetailCli()
 }
 
 type ordeDelivery struct {
@@ -60,9 +61,11 @@ Choose your menu: `
 	case "4":
 		utils.ClearBash()
 		d.EditOrderCli()
+	case "5":
+		utils.ClearBash()
+		d.RemoveOrderDetailCli()
 	case "6":
 		utils.ClearBash()
-		
 	case "7":
 		utils.ClearBash()
 		fmt.Println("Thank You")
@@ -191,6 +194,27 @@ func (d *ordeDelivery) EditOrderCli() {
 		log.Fatal("Failed Update Order")
 	}
 	fmt.Println("Update Order Successfully")
+	d.OrderMenu()
+}
+
+func (d *ordeDelivery) RemoveOrderDetailCli() {
+	fmt.Println("Data order yang tersedia: ")
+	orders, err := d.orderUsecase.ShowAllOrders()
+	if err != nil {
+			log.Fatal("Data is Empty")
+		}
+	for _, order := range orders {
+			fmt.Println(order.IdOrderDetail, order.OrdersIdOrder, order.ProductsProductCode, order.Qty)
+		}
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Input ID Order Detail : ")
+	scanner.Scan()
+	ID, _ := strconv.Atoi(scanner.Text())
+	err = d.orderUsecase.RemoveOrderDetail(ID)
+	if err != nil {
+		log.Fatal("Failed Delete Order")
+	}
+	fmt.Println("Delete Order Successfully")
 	d.OrderMenu()
 }
 

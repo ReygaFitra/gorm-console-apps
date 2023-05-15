@@ -12,6 +12,7 @@ type ProductUsecase interface {
 	ShowAllProducts() ([]entity.Products, error)
 	ShowProductByPcode(pCode string) (*entity.Products, error)
 	EditProduct(pCode string, dataProduct *entity.Products) error
+	RemoveProduct(pCode string) error
 }
 
 type productUsecase struct {
@@ -49,6 +50,15 @@ func (u *productUsecase) EditProduct(pCode string, dataProduct *entity.Products)
 	err := u.productRepo.UpdateProduct(pCode, dataProduct)
 	if err != nil {
 		log.Fatal("Update Product Failed!")
+		return err
+	}
+	return nil
+}
+
+func (u *productUsecase) RemoveProduct(pCode string) error {
+	err := u.productRepo.DeleteProduct(pCode)
+	if err != nil {
+		log.Fatal("Delete Product Failed!")
 		return err
 	}
 	return nil

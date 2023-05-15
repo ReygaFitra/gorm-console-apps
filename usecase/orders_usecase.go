@@ -12,6 +12,7 @@ type OrderUsecase interface {
 	AddOrderDetails(orderDetail *[]entity.OrderDetails) error
 	ShowAllOrders() ([]entity.OrderDetails, error)
 	EditOrder(id int, order *entity.Orders) error
+	RemoveOrderDetail(id int) error
 }
 
 type orderUsecase struct {
@@ -46,6 +47,15 @@ func (u *orderUsecase) ShowAllOrders() ([]entity.OrderDetails, error) {
 
 func (u *orderUsecase) EditOrder(id int, order *entity.Orders) error {
 	err := u.orderRepo.UpdateOrder(id, order)
+	if err != nil {
+		log.Fatal("Something whent wrong")
+		return err
+	}
+	return nil
+}
+
+func (u *orderUsecase) RemoveOrderDetail(id int) error {
+	err := u.orderRepo.DeleteOrderDetail(id)
 	if err != nil {
 		log.Fatal("Something whent wrong")
 		return err

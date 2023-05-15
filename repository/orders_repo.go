@@ -13,6 +13,7 @@ type OrderRepository interface {
 	InsertOrderDetails(orderDetail *[]entity.OrderDetails) error
 	GetAllOrders() ([]entity.OrderDetails, error)
 	UpdateOrder(id int, order *entity.Orders) error
+	DeleteOrderDetail(id int) error
 }
 
 type orderRepository struct {
@@ -51,6 +52,15 @@ func (r *orderRepository) UpdateOrder(id int, order *entity.Orders) error {
 	res := r.db.Where("id_order = ?", id).Updates(order)
 	if res.Error != nil {
 		log.Fatal("Failed Updating Order!")
+		return res.Error
+	}
+	return nil
+}
+
+func (r *orderRepository) DeleteOrderDetail(id int) error {
+	res := r.db.Where("id_order_detail = ?", id).Delete(&entity.OrderDetails{})
+	if res.Error != nil {
+		log.Fatal("Failed Deleting Order!")
 		return res.Error
 	}
 	return nil

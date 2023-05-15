@@ -17,6 +17,7 @@ type ProductDelivery interface {
 	AddProductCli()
 	ShowProductsCli()
 	EditProductCli()
+	RemoveProductCli()
 }
 
 type productDelivery struct {
@@ -53,7 +54,7 @@ Choose your menu: `
 		d.EditProductCli()
 	case "4":
 		utils.ClearBash()
-
+		d.RemoveProductCli()
 	case "5":
 		utils.ClearBash()
 	case "6":
@@ -200,6 +201,27 @@ func (d *productDelivery) EditProductCli() {
 		log.Fatal("Failed Update Product!")
 	}
 	fmt.Println("Product Update Successfully")
+	d.ProductMenu()
+}
+
+func (d *productDelivery) RemoveProductCli() {
+	fmt.Println("Product yang tersedia: ")
+	products, err := d.productUsecase.ShowAllProducts()
+	if err != nil {
+			log.Fatal("Data is Empty!")
+		}
+	for _, product := range products {
+			fmt.Println(product.ProductCode, product.ProductName, product.Stock, product.Price)
+		}
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Input Product Code : ")
+	scanner.Scan()
+	productCode := scanner.Text()
+	err = d.productUsecase.RemoveProduct(productCode)
+	if err != nil {
+		log.Fatal("Failed Delete Product")
+	}
+	fmt.Println("Product Delete Successfully")
 	d.ProductMenu()
 }
 
